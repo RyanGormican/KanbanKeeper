@@ -1,7 +1,7 @@
 <!-- App.vue -->
 <template>
   <div id="app">
-    <div className="links">
+    <div class="links">
       <a href="https://www.linkedin.com/in/ryangormican/">
         <Icon icon="mdi:linkedin" color="#0e76a8" width="60" />
       </a>
@@ -22,6 +22,8 @@
 <script>
   import KanbanBoard from './components/KanbanBoard.vue';
   import { Icon } from '@iconify/vue';
+  import KanbanKeeper from './KanbanKeeper.ts'; // Import KanbanKeeper
+
   export default {
   name: 'App',
   components: {
@@ -30,16 +32,18 @@
   },
   data() {
   return {
-  lists: [
-  { title: 'To Do', cards: [{ text: 'Task 1' }, { text: 'Task 2' }] },
-  { title: 'In Progress', cards: [{ text: 'Task 3' }, { text: 'Task 4' }] },
-  { title: 'Done', cards: [{ text: 'Task 5' }, { text: 'Task 6' }] }
-  ]
+  lists: KanbanKeeper.getLists()
   };
+  },
+  methods: {
+  saveLists(lists) {
+  this.lists = lists; 
+  KanbanKeeper.saveLists(lists); 
+  }
   }
   };
 </script>
+
 <style>
   @import '@/assets/input.css';
-
 </style>
