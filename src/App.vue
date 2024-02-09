@@ -1,27 +1,45 @@
+<!-- App.vue -->
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <div id="app">
+    <div className="links">
+      <a href="https://www.linkedin.com/in/ryangormican/">
+        <Icon icon="mdi:linkedin" color="#0e76a8" width="60" />
+      </a>
+      <a href="https://github.com/RyanGormican/KanbanKeeper">
+        <Icon icon="mdi:github" color="#e8eaea" width="60" />
+      </a>
+      <a href="https://ryangormicanportfoliohub.vercel.app/">
+        <Icon icon="teenyicons:computer-outline" color="#199c35" width="60" />
+      </a>
+    </div>
+    <div class="title">
+      <h1> KanbanKeeper</h1>
+    </div>
+    <kanban-board :lists="lists"></kanban-board>
+  </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
-
-export default defineComponent({
+<script>
+  import KanbanBoard from './components/KanbanBoard.vue';
+  import { Icon } from '@iconify/vue';
+  export default {
   name: 'App',
   components: {
-    HelloWorld
+  KanbanBoard,
+  Icon
+  },
+  data() {
+  return {
+  lists: [
+  { title: 'To Do', cards: [{ text: 'Task 1' }, { text: 'Task 2' }] },
+  { title: 'In Progress', cards: [{ text: 'Task 3' }, { text: 'Task 4' }] },
+  { title: 'Done', cards: [{ text: 'Task 5' }, { text: 'Task 6' }] }
+  ]
+  };
   }
-});
+  };
 </script>
-
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  @import '@/assets/input.css';
+
 </style>
