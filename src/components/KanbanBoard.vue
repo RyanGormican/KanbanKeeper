@@ -9,9 +9,10 @@
      :cards="list.cards"
      :listIndex="index"
       @list-updated="updateCardText"
+      @list-title-updated="updateListText"
       >
       </list>
-
+      <div class="add-list" @click="addList">+</div>
     </div>
   </div>
 </template>
@@ -31,9 +32,18 @@
   methods: {
   updateCardText({ newText, listIndex, cardIndex }) {
   this.lists[listIndex].cards[cardIndex].text = newText;
+  },
+  updateListText({ newTitle, listIndex}) {
+  this.lists[listIndex].title = newTitle;
+  },
+  addList() {
+  const newList = {
+  title: 'New List',
+  cards: []
+  };
+  this.lists.push(newList);
   }
   }
-
   };
 </script>
 
