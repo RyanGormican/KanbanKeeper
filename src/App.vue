@@ -22,7 +22,7 @@
 <script>
   import KanbanBoard from './components/KanbanBoard.vue';
   import { Icon } from '@iconify/vue';
-  import KanbanKeeper from './KanbanKeeper.ts'; // Import KanbanKeeper
+  import KanbanKeeper from './KanbanKeeper.ts';
 
   export default {
   name: 'App',
@@ -37,8 +37,14 @@
   },
   methods: {
   saveLists(lists) {
-  this.lists = lists; 
-  KanbanKeeper.saveLists(lists); 
+  this.lists = lists;
+  KanbanKeeper.saveLists(this.lists);
+  }
+  },
+  watch: {
+  lists: {
+  handler: 'saveLists', 
+  deep: true 
   }
   }
   };
