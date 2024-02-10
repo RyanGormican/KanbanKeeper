@@ -8,12 +8,14 @@
   right: 75px;
   height: 10vh; 
   z-index:5;
+
 }
 *{
 		font-family: Helvetica;
 }
 .title{
 	text-align:center;
+	padding-bottom:50px;
 }
 .card {
   background-color: #f4f4f4;
