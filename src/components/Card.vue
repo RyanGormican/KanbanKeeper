@@ -6,8 +6,9 @@
       <input v-if="editing" v-model="editedText" @blur="saveChanges" @keyup.enter="saveChanges">
     </div>
     <div>
-      <input type="date" :value="formattedDueDate" v-if="editing" @input="updateDueDate" class="due-date-input">
-        <p v-if="dueDate">{{ formattedDueDate }}</p>
+      <input type="datetime-local" :value="formattedDueDateTime" v-if="editing" @input="updateDueDateTime" class="due-date-input">
+        <!-- Display formatted due date time -->
+        <p v-if="dueDateTime">{{ formattedDueDateTime }}</p>
       </div>
   </div>
 </template>
@@ -19,7 +20,7 @@
   text: String,
   listIndex: Number,
   cardIndex: Number,
-  dueDate: String 
+  dueDateTime: String
   },
   data() {
   return {
@@ -28,8 +29,18 @@
   };
   },
   computed: {
-  formattedDueDate() {
-  return this.dueDate ? new Date(this.dueDate).toISOString().split('T')[0] : '';
+  formattedDueDateTime() {
+  if (this.dueDateTime) {
+  const date = new Date(this.dueDateTime);
+  const year = date.getFullYear();
+  const month = ('0' + (date.getMonth() + 1)).slice(-2);
+  const day = ('0' + date.getDate()).slice(-2);
+  const hours = ('0' + date.getHours()).slice(-2);
+  const minutes = ('0' + date.getMinutes()).slice(-2);
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
+  } else {
+  return '';
+  }
   }
   },
   methods: {
@@ -44,9 +55,9 @@
   });
   }
   },
-  updateDueDate(event) {
-  const newDueDate = event.target.value;
-  this.$emit('due-date-updated', { newDueDate, listIndex: this.listIndex, cardIndex: this.cardIndex });
+  updateDueDateTime(event) {
+  const newDueDateTime = event.target.value;
+  this.$emit('due-date-time-updated', { newDueDateTime, listIndex: this.listIndex, cardIndex: this.cardIndex });
   },
   saveChanges() {
   this.$emit('card-text-updated', { newText: this.editedText, listIndex: this.listIndex, cardIndex: this.cardIndex });

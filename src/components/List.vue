@@ -13,9 +13,9 @@
           :text="card.text"
           :listIndex="listIndex"
           :cardIndex="index"
-          :dueDate="card.dueDate"
+          :dueDateTime="card.dueDateTime"
           @card-text-updated="updateCardText"
-          @due-date-updated="updateDueDate"
+          @due-date-time-updated="updateDueDateTime"
           @dragstart="onDragStart"
       ></Card>
       </div>
@@ -58,16 +58,14 @@
   }
   });
   },
-  updateDueDate({ newDueDate, listIndex, cardIndex }) {
-  // Update the dueDate of the corresponding card
-  this.cards[cardIndex].dueDate = newDueDate;
-  // Emit the list-updated event to notify the parent component
+  updateDueDateTime({ newDueDateTime, listIndex, cardIndex }) {
+  this.cards[cardIndex].dueDateTime = newDueDateTime;
   this.$emit('list-updated', { newText: this.cards[cardIndex].text, listIndex, cardIndex });
   },
   addCard() {
   const newCard = {
   text: 'New Task',
-  dueDate: null
+  dueDateTime: null
   };
   this.cards.push(newCard);
   this.$emit('list-updated', { newText: newCard.text, listIndex: this.listIndex, cardIndex: this.cards.length - 1 });
