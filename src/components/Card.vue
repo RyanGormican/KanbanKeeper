@@ -8,14 +8,19 @@
     <div>
       <input type="datetime-local" :value="formattedDueDateTime" v-if="editing" @input="updateDueDateTime" class="due-date-input">
         <!-- Display formatted due date time -->
-        <p v-if="dueDateTime">{{ formattedDueDateTime }}</p>
+        <p v-if="dueDateTime">
+          <Icon icon="fluent-mdl2:date-time"/> {{ formattedDueDateTime }}</p>
       </div>
   </div>
 </template>
 
 <script>
+  import { Icon } from '@iconify/vue';
   export default {
   name: 'Card',
+  components: {
+  Icon
+  },
   props: {
   text: String,
   listIndex: Number,

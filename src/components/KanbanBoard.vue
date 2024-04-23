@@ -12,18 +12,19 @@
         @move-card="moveCard"
         @delete-list="deleteList"
       ></List>
-      <div class="add-list" @click="addList">+</div>
+       <Icon icon="ci:list-add" width="50" @click="addList"/>
     </div>
   </div>
 </template>
 
 <script>
 import List from './List.vue';
-
+import { Icon } from '@iconify/vue';
 export default {
   name: 'KanbanBoard',
   components: {
-    List
+    List,
+    Icon
   },
   props: {
     lists: Array
@@ -62,11 +63,5 @@ export default {
   font-size: 1.2rem;
 }
 
-.add-list {
-  flex: 0 0 auto;
-  margin-right: 20px;
-  cursor: pointer;
-  font-size: 1.5rem;
-  padding-left: 30px;
-}
+
 </style>
