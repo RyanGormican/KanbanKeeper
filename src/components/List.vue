@@ -1,7 +1,8 @@
 <template>
-  <div class="list" @click="startEditing" @dragover.prevent="" @drop="onDrop">
+  <div class="list" @dragover.prevent="" @drop="onDrop">
     <span v-if="!editing">
-      <h2>{{ title }}</h2>
+      <h2 @click="startEditingTitle">{{ title }}</h2>
+      <!-- Differentiate click event -->
       <div class="add-card" @click.stop="addCard">+</div>
     </span>
     <input v-model="newTitle" v-else="" @blur="finishEditing" @keyup.enter="finishEditing">
@@ -12,7 +13,9 @@
           :text="card.text"
           :listIndex="listIndex"
           :cardIndex="index"
+          :dueDate="card.dueDate"
           @card-text-updated="updateCardText"
+          @due-date-updated="updateDueDate"
           @dragstart="onDragStart"
       ></Card>
       </div>
@@ -45,17 +48,29 @@
   this.cards.splice(cardIndex, 1);
   }
   },
-  addCard() {
-  const newCard = { text: 'New Task' };
-  this.cards.push(newCard);
-  this.$emit('list-updated', { newText: newCard.text, listIndex: this.listIndex, cardIndex: this.cards.length - 1 });
-  },
-  startEditing() {
+  startEditingTitle() {
   this.editing = true;
   this.newTitle = this.title;
   this.$nextTick(() => {
-  this.$el.querySelector('input').focus();
+  const inputElement = this.$el.querySelector('input');
+  if (inputElement) {
+  inputElement.focus();
+  }
   });
+  },
+  updateDueDate({ newDueDate, listIndex, cardIndex }) {
+  // Update the dueDate of the corresponding card
+  this.cards[cardIndex].dueDate = newDueDate;
+  // Emit the list-updated event to notify the parent component
+  this.$emit('list-updated', { newText: this.cards[cardIndex].text, listIndex, cardIndex });
+  },
+  addCard() {
+  const newCard = {
+  text: 'New Task',
+  dueDate: null
+  };
+  this.cards.push(newCard);
+  this.$emit('list-updated', { newText: newCard.text, listIndex: this.listIndex, cardIndex: this.cards.length - 1 });
   },
   finishEditing() {
   this.editing = false;

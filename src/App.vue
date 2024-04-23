@@ -15,7 +15,9 @@
     <div class="title">
       <h1> KanbanKeeper</h1>
     </div>
-    <kanban-board :lists="lists"></kanban-board>
+    <hr style="border: none; border-top: 2px solid #000;">
+
+      <kanban-board :lists="lists"></kanban-board>
   </div>
 </template>
 

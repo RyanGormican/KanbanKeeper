@@ -1,7 +1,14 @@
 <template>
-  <div class="card" draggable="true" @dragstart="onDragStart" @dblclick="toggleEditMode">
-    <p v-if="!editing" @click="toggleEditMode">{{ text }}</p>
-    <input v-if="editing" v-model="editedText" @blur="saveChanges" @keyup.enter="saveChanges">
+  <div class="card" draggable="true" @dragstart="onDragStart">
+    <div>
+      <p v-if="!editing" @click="startEditing">{{ text }}</p>
+      <!-- Click handler for card text -->
+      <input v-if="editing" v-model="editedText" @blur="saveChanges" @keyup.enter="saveChanges">
+    </div>
+    <div>
+      <input type="date" :value="formattedDueDate" v-if="editing" @input="updateDueDate" class="due-date-input">
+        <p v-if="dueDate">{{ formattedDueDate }}</p>
+      </div>
   </div>
 </template>
 
@@ -11,7 +18,8 @@
   props: {
   text: String,
   listIndex: Number,
-  cardIndex: Number
+  cardIndex: Number,
+  dueDate: String 
   },
   data() {
   return {
@@ -19,14 +27,26 @@
   editedText: this.text
   };
   },
+  computed: {
+  formattedDueDate() {
+  return this.dueDate ? new Date(this.dueDate).toISOString().split('T')[0] : '';
+  }
+  },
   methods: {
-  toggleEditMode() {
-  this.editing = !this.editing;
-  if (this.editing) {
+  startEditing(event) {
+  if (!this.editing && !event.target.classList.contains('due-date-input')) {
+  this.editing = true;
   this.$nextTick(() => {
-  this.$el.querySelector('input').focus();
+  const inputElement = this.$el.querySelector('input[type="text"]');
+  if (inputElement) {
+  inputElement.focus();
+  }
   });
   }
+  },
+  updateDueDate(event) {
+  const newDueDate = event.target.value;
+  this.$emit('due-date-updated', { newDueDate, listIndex: this.listIndex, cardIndex: this.cardIndex });
   },
   saveChanges() {
   this.$emit('card-text-updated', { newText: this.editedText, listIndex: this.listIndex, cardIndex: this.cardIndex });
