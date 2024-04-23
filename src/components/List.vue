@@ -3,10 +3,19 @@
     <span v-if="!editing">
       <h2 @click="startEditingTitle">{{ title }}</h2>
       <!-- Differentiate click event -->
-      <div class="add-card" @click.stop="addCard">+</div>
+      <Icon icon="ic:outline-note-add" width="20" @click.stop="addCard" />
+      <Icon icon="mdi:trash" width="20" @click.stop="showDeletePopup = true" />
     </span>
     <input v-model="newTitle" v-else="" @blur="finishEditing" @keyup.enter="finishEditing">
+     
       <div class="cards">
+        <!-- Delete list confirmation popup -->
+        <div v-if="showDeletePopup" class="delete-popup">
+          <p>Are you sure you want to delete this list?</p>
+          <button @click="deleteList">Delete</button>
+          <button @click="cancelDelete">Cancel</button>
+        </div>
+      </div>
         <Card
           v-for="(card, index) in cards"
           :key="index"
@@ -19,16 +28,18 @@
           @dragstart="onDragStart"
       ></Card>
       </div>
-    </div>
+     
 </template>
 
 <script>
   import Card from './Card.vue';
+  import { Icon } from '@iconify/vue';
 
   export default {
   name: 'List',
   components: {
-  Card
+  Card,
+  Icon
   },
   props: {
   title: String,
@@ -38,7 +49,8 @@
   data() {
   return {
   editing: false,
-  newTitle: this.title
+  newTitle: this.title,
+  showDeletePopup: false
   };
   },
   methods: {
@@ -80,6 +92,13 @@
   this.$emit('list-title-updated', { newTitle: this.newTitle, listIndex: this.listIndex });
   }
   },
+  deleteList() {
+  this.$emit('delete-list', this.listIndex);
+  this.showDeletePopup = false;
+  },
+  cancelDelete() {
+  this.showDeletePopup = false; 
+  },
   onDrop(event) {
   const data = JSON.parse(event.dataTransfer.getData('text/plain'));
   const { fromListIndex, fromCardIndex } = data;
@@ -99,6 +118,7 @@
 <style scoped="">
   .list {
   cursor: pointer;
+  padding: 0.25vw;
   }
 
   .list h2 {
@@ -122,5 +142,12 @@
 
   .cards {
   margin-top: 10px;
+  }
+
+  .delete-popup {
+  background-color: red;
+  padding: 20px;
+  border: 1px solid black;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
   }
 </style>
