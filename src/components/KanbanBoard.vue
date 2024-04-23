@@ -1,17 +1,16 @@
-<!-- KanbanBoard.vue -->
 <template>
   <div class="kanban-board">
     <div class="lists-container">
-      <list
-     v-for="(list, index) in lists"
-     :key="index"
-     :title="list.title"
-     :cards="list.cards"
-     :listIndex="index"
-      @list-updated="updateCardText"
-      @list-title-updated="updateListText"
-      >
-      </list>
+      <List
+        v-for="(list, index) in lists"
+        :key="index"
+        :title="list.title"
+        :cards="list.cards"
+        :listIndex="index"
+        @list-updated="updateCardText"
+        @list-title-updated="updateListText"
+        @move-card="moveCard"
+      ></List>
       <div class="add-list" @click="addList">+</div>
     </div>
   </div>
@@ -19,7 +18,6 @@
 
 <script>
   import List from './List.vue';
-  import { reactive } from 'vue';
 
   export default {
   name: 'KanbanBoard',
@@ -33,7 +31,7 @@
   updateCardText({ newText, listIndex, cardIndex }) {
   this.lists[listIndex].cards[cardIndex].text = newText;
   },
-  updateListText({ newTitle, listIndex}) {
+  updateListText({ newTitle, listIndex }) {
   this.lists[listIndex].title = newTitle;
   },
   addList() {
@@ -42,23 +40,29 @@
   cards: []
   };
   this.lists.push(newList);
+  },
+  moveCard({ fromListIndex, toListIndex, fromCardIndex }) {
+  const card = this.lists[fromListIndex].cards.splice(fromCardIndex, 1)[0];
+  this.lists[toListIndex].cards.splice(fromCardIndex, 0, card); // Insert the card at the appropriate index in the destination list
   }
   }
   };
 </script>
 
 <style scoped="">
-  .kanban-board {
-
-  }
+  .kanban-board {}
 
   .lists-container {
   display: flex;
-  overflow-x: auto; 
+  overflow-x: auto;
+  font-size: 1.2rem;
   }
 
-  .list {
-  flex: 0 0 auto; 
-  margin-right: 20px; 
+  .add-list {
+  flex: 0 0 auto;
+  margin-right: 20px;
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding-left: 30px;
   }
 </style>
