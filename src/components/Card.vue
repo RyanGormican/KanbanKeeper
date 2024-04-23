@@ -10,6 +10,7 @@
         <!-- Display formatted due date time -->
         <p v-if="dueDateTime">
           <Icon icon="fluent-mdl2:date-time"/> {{ formattedDueDateTime }}</p>
+        
       </div>
   </div>
 </template>
