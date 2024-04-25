@@ -1,4 +1,3 @@
-<!-- App.vue -->
 <template>
   <div id="app">
     <div class="links">
@@ -17,12 +16,32 @@
     </div>
     <hr style="border: none; border-top: 2px solid #000;">
 
-      <kanban-board :lists="lists"></kanban-board>
-  </div>
+      <!-- Add the buttons here -->
+      <div class="toggle-buttons">
+        <button @click="toggleView('list')">
+          <Icon icon="ph:list" color="#000" width="24" />
+        </button>
+        <button @click="toggleView('calendar')">
+          <Icon icon="mdi:calendar" color="#000" width="24" />
+        </button>
+      </div>
+
+      <hr style="border: none; border-top: 2px solid #000;">
+
+        <!-- Conditionally render either the kanban board or calendar -->
+        <div v-if="currentView === 'list'">
+          <kanban-board :lists="lists"></kanban-board>
+        </div>
+        <div v-else-if="currentView === 'calendar'">
+          <!-- Your calendar component goes here -->
+          <calendar :lists="lists"></calendar>
+        </div>
+      </div>
 </template>
 
 <script>
   import KanbanBoard from './components/KanbanBoard.vue';
+  import Calendar from './components/Calendar.vue';
   import { Icon } from '@iconify/vue';
   import KanbanKeeper from './KanbanKeeper.ts';
 
@@ -30,23 +49,28 @@
   name: 'App',
   components: {
   KanbanBoard,
-  Icon
+  Icon,
+  Calendar,
   },
   data() {
   return {
-  lists: KanbanKeeper.getLists()
+  lists: KanbanKeeper.getLists(),
+  currentView: 'list'
   };
   },
   methods: {
   saveLists(lists) {
   this.lists = lists;
   KanbanKeeper.saveLists(this.lists);
+  },
+  toggleView(view) {
+  this.currentView = view;
   }
   },
   watch: {
   lists: {
-  handler: 'saveLists', 
-  deep: true 
+  handler: 'saveLists',
+  deep: true
   }
   }
   };
@@ -54,4 +78,21 @@
 
 <style>
   @import '@/assets/input.css';
+  /* Add any styling for your toggle buttons here */
+  .toggle-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  }
+  .toggle-buttons button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  background-color: transparent;
+  border: 1px solid #000;
+  border-radius: 5px;
+  cursor: pointer;
+  }
+  .toggle-buttons button:hover {
+  background-color: #f0f0f0;
+  }
 </style>

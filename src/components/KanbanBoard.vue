@@ -62,6 +62,4 @@ export default {
   overflow-x: auto;
   font-size: 1.2rem;
 }
-
-
 </style>
