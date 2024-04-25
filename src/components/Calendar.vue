@@ -26,6 +26,7 @@
              :class="{ 'empty': day === '', 'selected': day === selectedDay && currentMonth === selectedMonth && currentYear === selectedYear }"
               @click="selectDay(day)"
             >
+
               {{ day === '' ? '' : day }}
               <span class="due-count">{{ getDueCount(day) }}</span>
             </div>
