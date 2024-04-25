@@ -16,18 +16,20 @@
           <button @click="cancelDelete">Cancel</button>
         </div>
       </div>
-        <Card
-          v-for="(card, index) in cards"
-          :key="index"
-          :text="card.text"
-          :listIndex="listIndex"
-          :cardIndex="index"
-          :dueDateTime="card.dueDateTime"
-          @card-text-updated="updateCardText"
-          @due-date-time-updated="updateDueDateTime"
-          @dragstart="onDragStart"
-      ></Card>
-      </div>
+      <Card
+        v-for="(card, index) in cards"
+        :key="index"
+        :text="card.text"
+        :listIndex="listIndex"
+        :cardIndex="index"
+        :dueDateTime="card.dueDateTime"
+        @card-text-updated="updateCardText"
+        @due-date-time-updated="updateDueDateTime"
+        @dragstart="onDragStart($event, index)"
+        >
+      </Card>
+
+    </div>
      
 </template>
 
@@ -97,7 +99,7 @@
   this.showDeletePopup = false;
   },
   cancelDelete() {
-  this.showDeletePopup = false; 
+  this.showDeletePopup = false;
   },
   onDrop(event) {
   const data = JSON.parse(event.dataTransfer.getData('text/plain'));
