@@ -28,7 +28,6 @@
         @dragstart="onDragStart($event, index)"
         >
       </Card>
-
     </div>
      
 </template>
