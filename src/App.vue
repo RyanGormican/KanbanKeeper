@@ -16,7 +16,6 @@
     </div>
     <hr style="border: none; border-top: 2px solid #000;">
 
-      <!-- Add the buttons here -->
       <div class="toggle-buttons">
         <button @click="toggleView('list')">
           <Icon icon="ph:list" color="#000" width="24" />
@@ -24,17 +23,21 @@
         <button @click="toggleView('calendar')">
           <Icon icon="mdi:calendar" color="#000" width="24" />
         </button>
+        <button @click="toggleView('utility')">
+          <Icon icon="mdi:wrench" color="#000" width="24" />
+        </button>
       </div>
 
       <hr style="border: none; border-top: 2px solid #000;">
 
-        <!-- Conditionally render either the kanban board or calendar -->
         <div v-if="currentView === 'list'">
           <kanban-board :lists="lists"></kanban-board>
         </div>
         <div v-else-if="currentView === 'calendar'">
-          <!-- Your calendar component goes here -->
           <calendar :lists="lists"></calendar>
+        </div>
+        <div v-else-if="currentView === 'utility'">
+          <utility :lists="lists" @updateLists="handleListUpdate" />
         </div>
       </div>
 </template>
@@ -42,6 +45,7 @@
 <script>
   import KanbanBoard from './components/KanbanBoard.vue';
   import Calendar from './components/Calendar.vue';
+  import Utility from './components/Utility.vue';
   import { Icon } from '@iconify/vue';
   import KanbanKeeper from './KanbanKeeper.ts';
 
@@ -51,11 +55,12 @@
   KanbanBoard,
   Icon,
   Calendar,
+  Utility,
   },
   data() {
   return {
   lists: KanbanKeeper.getLists(),
-  currentView: 'list'
+  currentView: 'list',
   };
   },
   methods: {
@@ -65,20 +70,22 @@
   },
   toggleView(view) {
   this.currentView = view;
+  },
+  handleListUpdate(newList) { // Method to handle updated list data from Utility.vue
+  this.lists = newList;
   }
   },
   watch: {
   lists: {
   handler: 'saveLists',
-  deep: true
-  }
-  }
+  deep: true,
+  },
+  },
   };
 </script>
 
 <style>
   @import '@/assets/input.css';
-  /* Add any styling for your toggle buttons here */
   .toggle-buttons {
   display: flex;
   justify-content: center;
