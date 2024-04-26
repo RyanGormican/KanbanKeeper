@@ -14,6 +14,7 @@
       ></List>
        <Icon icon="ci:list-add" width="50" @click="addList"/>
     </div>
+
   </div>
 </template>
 
@@ -55,11 +56,5 @@ export default {
 </script>
 
 <style scoped="">
-.kanban-board {}
-
-.lists-container {
-  display: flex;
-  overflow-x: auto;
-  font-size: 1.2rem;
-}
+  @import '@/assets/input.css';
 </style>

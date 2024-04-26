@@ -1,7 +1,7 @@
 <template>
   <div class="list" @dragover.prevent="" @drop="onDrop">
     <span v-if="!editing">
-      <h2 @click="startEditingTitle">{{ title }}</h2>
+      <h2  @click="startEditingTitle">{{ title }}</h2>
       <!-- Differentiate click event -->
       <Icon icon="ic:outline-note-add" width="20" @click.stop="addCard" />
       <Icon icon="mdi:trash" width="20" @click.stop="showDeletePopup = true" />
@@ -26,6 +26,7 @@
         @card-text-updated="updateCardText"
         @due-date-time-updated="updateDueDateTime"
         @dragstart="onDragStart($event, index)"
+        @click="selectCard(card)"
         >
       </Card>
     </div>
@@ -60,6 +61,9 @@
   if (newText.trim() === '') {
   this.cards.splice(cardIndex, 1);
   }
+  },
+  selectCard() {
+  this.$emit('card-selected', { text: this.text, dueDateTime: this.dueDateTime });
   },
   startEditingTitle() {
   this.editing = true;
@@ -117,38 +121,5 @@
 </script>
 
 <style scoped="">
-  .list {
-  cursor: pointer;
-  padding: 0.25vw;
-  }
-
-  .list h2 {
-  margin: 0;
-  }
-
-  input {
-  margin: 0;
-  padding: 0;
-  border: none;
-  outline: none;
-  font-size: 1.5rem;
-  font-weight: bold;
-  }
-
-  .add-card {
-  margin-left: 10px;
-  cursor: pointer;
-  font-size: 1.5rem;
-  }
-
-  .cards {
-  margin-top: 10px;
-  }
-
-  .delete-popup {
-  background-color: red;
-  padding: 20px;
-  border: 1px solid black;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-  }
+   @import '@/assets/input.css';
 </style>
