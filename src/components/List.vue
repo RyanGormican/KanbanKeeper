@@ -62,8 +62,8 @@
   this.cards.splice(cardIndex, 1);
   }
   },
-  selectCard() {
-  this.$emit('card-selected', { text: this.text, dueDateTime: this.dueDateTime });
+  selectCard(card) {
+  this.$emit('card-selected', card); 
   },
   startEditingTitle() {
   this.editing = true;
