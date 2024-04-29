@@ -23,6 +23,9 @@
         <button @click="toggleView('calendar')">
           <Icon icon="mdi:calendar" color="#000" width="24" />
         </button>
+        <button @click="toggleView('tasks')">
+          <Icon icon="carbon:checkmark-filled" color="#000" width="24" />
+        </button>
         <button @click="toggleView('utility')">
           <Icon icon="mdi:wrench" color="#000" width="24" />
         </button>
@@ -31,10 +34,10 @@
       <hr style="border: none; border-top: 2px solid #000;">
 
         <div v-if="currentView === 'list'">
-          <kanban-board :lists="lists"></kanban-board>
+          <kanban-board ref="kanbanBoard":lists="lists"   @showCardModal="showCardModal"</kanban-board>
         </div>
         <div v-else-if="currentView === 'calendar'">
-          <calendar :lists="lists"></calendar>
+          <calendar :lists="lists" @task-selected="handleTaskSelected"></calendar>
         </div>
         <div v-else-if="currentView === 'utility'">
           <utility :lists="lists" @updateLists="handleListUpdate" />
@@ -68,6 +71,14 @@
   this.lists = lists;
   KanbanKeeper.saveLists(this.lists);
   },
+  handleTaskSelected(selectedTask) {
+  // Switch to the board view
+  this.currentView = 'list';
+  this.$emit('show-card-modal', { card: selectedTask, listIndex: selectedTask.listIndex, cardIndex: selectedTask.cardIndex });
+  
+
+  },
+
   toggleView(view) {
   this.currentView = view;
   },

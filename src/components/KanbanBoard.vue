@@ -17,6 +17,7 @@
       @move-card="moveCard"
       @delete-list="deleteList"
       @card-selected="showCardModal"
+      
 ></List>
 
       <Icon icon="ci:list-add" width="50" @click="addList"/>
@@ -47,7 +48,6 @@
     </div>
   </div>
 </template>
-
 <script>
   import List from './List.vue';
   import { Icon } from '@iconify/vue';
@@ -61,9 +61,7 @@
   props: {
   lists: Array,
   index: Number,
-  cardIndex:Number,
-  selectedListIndex: Number,
-  selectedCardIndex: Number
+  cardIndex: Number,
   },
   data() {
   return {
@@ -74,7 +72,7 @@
   selectedCardIndex: null,
   editedDueDateTime: '',
   searchQuery: '',
-  showDeletePopup: false 
+  showDeletePopup: false
   };
   },
   methods: {
@@ -104,7 +102,6 @@
   this.showDeletePopup = false;
   this.isModalOpen = true;
   },
-
   closeCardModal() {
   this.selectedCard = null;
   this.isModalOpen = false;
@@ -123,15 +120,11 @@
   this.editing = false;
   },
   deleteCardFromModal() {
-  // Emit an event to delete the selected card
   this.lists[this.selectedListIndex].cards.splice(this.selectedCardIndex, 1);
   this.showDeletePopup = false;
-  this.closeCardModal(); // Close the modal after deleting the card
+  this.closeCardModal();
   },
-
-
   cancelDelete() {
-  // Cancel delete action, hide the delete confirmation popup
   this.showDeletePopup = false;
   }
   },
@@ -153,7 +146,6 @@
   const trimmedQuery = this.searchQuery.trim();
 
   if (trimmedQuery === '') {
-  // If searchQuery is empty, return the lists with all cards included
   return this.lists.map(list => ({
   ...list,
   filteredCards: list.cards
@@ -169,9 +161,11 @@
   };
   }).filter(list => list.filteredCards?.length > 0);
   }
-  }
+  },
+  
   };
 </script>
+
 
 <style scoped="">
   @import '@/assets/input.css';
