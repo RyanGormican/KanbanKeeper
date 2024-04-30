@@ -42,6 +42,9 @@
         <div v-else-if="currentView === 'utility'">
           <utility :lists="lists" @updateLists="handleListUpdate" />
         </div>
+          <div v-else-if="currentView === 'tasks'">
+          <tasks :lists="lists" @task-selected="handleTaskSelected" />
+        </div>
       </div>
 </template>
 
@@ -49,6 +52,7 @@
   import KanbanBoard from './components/KanbanBoard.vue';
   import Calendar from './components/Calendar.vue';
   import Utility from './components/Utility.vue';
+  import Tasks from './components/Tasks.vue';
   import { Icon } from '@iconify/vue';
   import KanbanKeeper from './KanbanKeeper.ts';
 
@@ -59,6 +63,7 @@
   Icon,
   Calendar,
   Utility,
+  Tasks,
   },
   data() {
   return {

@@ -7,18 +7,17 @@
 
     <div class="lists-container">
       <List
-      v-for="(list, index) in filteredLists"
-      :key="index"
-      :title="list.title"
-      :cards="list.filteredCards"
-      :listIndex="index"
-      @list-updated="updateCardText"
-      @list-title-updated="updateListText"
-      @move-card="moveCard"
-      @delete-list="deleteList"
-      @card-selected="showCardModal"
-      
-></List>
+        v-for="(list, index) in filteredLists"
+        :key="index"
+        :title="list.title"
+        :cards="list.filteredCards"
+        :listIndex="index"
+        @list-updated="updateCardText"
+        @list-title-updated="updateListText"
+        @move-card="moveCard"
+        @delete-list="deleteList"
+        @card-selected="showCardModal"
+      ></List>
 
       <Icon icon="ci:list-add" width="50" @click="addList"/>
     </div>
@@ -37,6 +36,15 @@
               <Icon icon="fluent-mdl2:date-time"/> {{ formattedDueDateTime }}
             </p>
           </div>
+        <button @click="addTask">Add Task</button>
+        <div v-if="selectedCard.tasks">
+          <div v-for="(task, index) in selectedCard.tasks" :key="index">
+            <input type="checkbox" v-model="task.completed" @change="toggleTaskCompletion(index)">
+              <input type="text" v-model="task.title" @change="updateTaskTitle(index)">
+                <Icon icon="mdi:delete" @click="deleteTask(index)" />
+              </div>
+        </div>
+
         <Icon icon="mdi:trash-can-outline" width="20" @click.stop="showDeletePopup = true" />
         <!-- Delete card confirmation popup -->
         <div v-if="showDeletePopup" class="delete-popup">
@@ -48,6 +56,7 @@
     </div>
   </div>
 </template>
+
 <script>
   import List from './List.vue';
   import { Icon } from '@iconify/vue';
@@ -90,7 +99,10 @@
   this.lists.push(newList);
   },
   moveCard({ fromListIndex, toListIndex, fromCardIndex }) {
-  this.$emit('card-moved', { fromListIndex, toListIndex, fromCardIndex });
+  // Remove the card from the source list
+  const movedCard = this.lists[fromListIndex].cards.splice(fromCardIndex, 1)[0];
+  // Add the card to the target list
+  this.lists[toListIndex].cards.push(movedCard);
   },
   deleteList(listIndex) {
   this.lists.splice(listIndex, 1);
@@ -126,7 +138,32 @@
   },
   cancelDelete() {
   this.showDeletePopup = false;
+  },
+  addTask() {
+  if (!this.selectedCard) return;
+  if (!this.selectedCard.tasks) {
+  this.selectedCard.tasks = [];
   }
+  this.selectedCard.tasks.push({ title: 'New Task', completed: false });
+  },
+
+
+
+  toggleTaskCompletion(index) {
+
+  },
+  updateTaskTitle(index) {
+  if (this.selectedCard && this.selectedCard.tasks && this.selectedCard.tasks[index]) {
+  this.selectedCard.tasks[index].title = this.selectedCard.tasks[index].title.trim(); 
+  }
+  },
+
+  deleteTask(index) {
+  if (this.selectedCard && this.selectedCard.tasks) {
+  this.selectedCard.tasks.splice(index, 1);
+  }
+  },
+
   },
   computed: {
   formattedDueDateTime() {
@@ -161,11 +198,9 @@
   };
   }).filter(list => list.filteredCards?.length > 0);
   }
-  },
-  
+  }
   };
 </script>
-
 
 <style scoped="">
   @import '@/assets/input.css';

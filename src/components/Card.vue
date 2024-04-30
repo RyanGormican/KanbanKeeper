@@ -3,9 +3,12 @@
     <div>
       <p>{{ text }}</p>
     </div>
-    <div>
+    <div class="card-info">
       <p v-if="dueDateTime">
-        <Icon icon="fluent-mdl2:date-time"/> {{ formattedDueDateTime }}
+        <Icon icon="mdi:calendar"/> {{ formattedDueDateTime }}
+      </p>
+      <p v-if="tasks && tasks.length > 0">
+        <Icon icon="carbon:checkmark-filled"/> {{ completedTasksCount }} / {{ totalTasksCount }}
       </p>
     </div>
   </div>
@@ -23,7 +26,8 @@
   text: String,
   dueDateTime: String,
   listIndex: Number,
-  cardIndex: Number
+  cardIndex: Number,
+  tasks: Array
   },
   computed: {
   formattedDueDateTime() {
@@ -38,6 +42,13 @@
   } else {
   return '';
   }
+  },
+  completedTasksCount() {
+  if (!this.tasks) return 0;
+  return this.tasks.filter(task => task.completed).length;
+  },
+  totalTasksCount() {
+  return this.tasks ? this.tasks.length : 0;
   }
   },
   methods: {

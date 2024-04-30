@@ -143,7 +143,9 @@
   .cards {
   margin-top: 10px;
   }
-
+  .card-info {
+	display:flex;
+  }
   .delete-popup {
   background-color: red;
   padding: 20px;
@@ -182,3 +184,17 @@
   text-decoration: none;
   cursor: pointer;
   }
+  .tasks {
+  margin-top: 20px;
+}
+.tasks h2 {
+  margin-bottom: 10px;
+}
+.tasks h3 {
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+.tasks h4 {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}

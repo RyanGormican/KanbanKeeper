@@ -2,33 +2,32 @@
   <div class="list" @dragover.prevent="" @drop="onDrop">
     <span v-if="!editing">
       <h2 @click="startEditingTitle">{{ title }}</h2>
-      <!-- Differentiate click event -->
       <Icon icon="ic:outline-note-add" width="20" @click.stop="addCard" />
       <Icon icon="mdi:trash" width="20" @click.stop="showDeletePopup = true" />
     </span>
     <input v-model="newTitle" v-else="" @blur="finishEditing" @keyup.enter="finishEditing">
 
-    <div class="cards">
-      <!-- Delete card confirmation popup -->
-      <div v-if="showDeletePopup" class="delete-popup">
-        <p>Are you sure you want to delete this list?</p>
-        <button @click="deleteList">Delete</button>
-        <button @click="cancelDelete">Cancel</button>
+      <div class="cards">
+        <div v-if="showDeletePopup" class="delete-popup">
+          <p>Are you sure you want to delete this list?</p>
+          <button @click="deleteList">Delete</button>
+          <button @click="cancelDelete">Cancel</button>
+        </div>
       </div>
-    </div>
-    <Card
-      v-for="(card, index) in filteredCards?.length > 0 ? filteredCards : cards"
-      :key="index"
-      :text="card.text"
-      :listIndex="listIndex"
-      :cardIndex="index"
-      :dueDateTime="card.dueDateTime"
-      @card-text-updated="updateCardText"
-      @due-date-time-updated="updateDueDateTime"
-      @dragstart="onDragStart($event, index)"
-      @click="selectCard(card, listIndex, index)"
+      <Card
+        v-for="(card, index) in cards"
+        :key="index"
+        :text="card.text"
+        :tasks="card.tasks"
+        :listIndex="listIndex"
+        :cardIndex="index"
+        :dueDateTime="card.dueDateTime"
+        @card-text-updated="updateCardText"
+        @due-date-time-updated="updateDueDateTime"
+        @click="selectCard(card, listIndex, index)"
+        @dragstart="onDragStart($event, index)"
     ></Card>
-  </div>
+    </div>
 </template>
 
 <script>
@@ -45,9 +44,7 @@
   title: String,
   cards: Array,
   listIndex: Number,
-  filteredCards: Array,
-  index: Number,
-  cardIndex:Number
+  filteredCards: Array
   },
   data() {
   return {
@@ -99,12 +96,10 @@
   }
   },
   deleteList() {
-  // Emit an event to delete the selected card
   this.$emit('delete-list', this.listIndex);
   this.showDeletePopup = false;
   },
   cancelDelete() {
-  // Cancel delete action, hide the delete confirmation popup
   this.showDeletePopup = false;
   },
   onDrop(event) {
