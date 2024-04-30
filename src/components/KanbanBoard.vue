@@ -146,46 +146,47 @@
   if (card.dueDateTime) {
   const cardDateTime = new Date(card.dueDateTime).getTime();
   return cardDateTime >= startDateTime && cardDateTime <= endDateTime;
-  }
-  return false;
-  });
-  },
+    }
+    return false;
+    });
+    },
 
-  clearDateRange() {
-  this.startDate = null;
-  this.endDate = null;
-  },
-  updateDueDateTime(event) {
-  this.editedDueDateTime = event.target.value;
-  },
-  saveChanges() {
-  this.selectedCard.text = this.editedText;
-  this.selectedCard.dueDateTime = this.editedDueDateTime;
-  this.editing = false;
-  },
-  deleteCardFromModal() {
-  this.lists[this.selectedListIndex].cards.splice(this.selectedCardIndex, 1);
-  this.showDeletePopup = false;
-  this.closeCardModal();
-  },
-  cancelDelete() {
-  this.showDeletePopup = false;
-  },
-  addTask() {
-  if (!this.selectedCard) return;
-  if (!this.selectedCard.tasks) {
-  this.selectedCard.tasks = [];
-  }
-  this.selectedCard.tasks.push({ title: 'New Task', completed: false });
-  },
+    clearDateRange() {
+    this.startDate = null;
+    this.endDate = null;
+    this.searchQuery='';
+    },
+    updateDueDateTime(event) {
+    this.editedDueDateTime = event.target.value;
+    },
+    saveChanges() {
+    this.selectedCard.text = this.editedText;
+    this.selectedCard.dueDateTime = this.editedDueDateTime;
+    this.editing = false;
+    },
+    deleteCardFromModal() {
+    this.lists[this.selectedListIndex].cards.splice(this.selectedCardIndex, 1);
+    this.showDeletePopup = false;
+    this.closeCardModal();
+    },
+    cancelDelete() {
+    this.showDeletePopup = false;
+    },
+    addTask() {
+    if (!this.selectedCard) return;
+    if (!this.selectedCard.tasks) {
+    this.selectedCard.tasks = [];
+    }
+    this.selectedCard.tasks.push({ title: 'New Task', completed: false });
+    },
 
 
 
-  toggleTaskCompletion(index) {
+    toggleTaskCompletion(index) {
 
-  },
-  updateTaskTitle(index) {
-  if (this.selectedCard && this.selectedCard.tasks && this.selectedCard.tasks[index]) {
+    },
+    updateTaskTitle(index) {
+    if (this.selectedCard && this.selectedCard.tasks && this.selectedCard.tasks[index]) {
   this.selectedCard.tasks[index].title = this.selectedCard.tasks[index].title.trim(); 
   }
   },
