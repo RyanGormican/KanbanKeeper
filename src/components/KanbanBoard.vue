@@ -213,49 +213,53 @@
     }
     },
     filteredLists() {
-    // Trimmed search query
-    const trimmedQuery = this.searchQuery.trim().toLowerCase();
-  
-    // Check if searchQuery or startDate and endDate have a value
-    if (!trimmedQuery && !(this.startDate && this.endDate)) {
+  // Trimmed search query
+  const trimmedQuery = this.searchQuery.trim();
+
+  // Check if searchQuery or startDate and endDate have a value
+  if (!trimmedQuery && !(this.startDate && this.endDate)) {
     // If both searchQuery and date range are empty, return the full list with all cards
     return this.lists.map(list => {
-    return {
-    ...list,
-    filteredCards: list.cards
-    };
+      return {
+        ...list,
+        filteredCards: list.cards
+      };
     });
-    }
-    // Filter lists based on whether any of their cards match the search query and date range
-    return this.lists.map(list => {
+  }
+
+
+  const lowercaseQuery = trimmedQuery.toLowerCase();
+
+  // Filter lists based on whether any of their cards match the search query and date range
+  return this.lists.map(list => {
     // Apply search query filter
     let filteredCards = list.cards.filter(card => {
-    return card.text.toLowerCase().includes(trimmedQuery);
+      return card.text.toLowerCase().includes(lowercaseQuery);
     });
 
     // Apply date range filter if start and end dates are set
     if (this.startDate && this.endDate) {
-    const startDateTime = new Date(this.startDate).getTime();
-    const endDateTime = new Date(this.endDate).getTime();
+      const startDateTime = new Date(this.startDate).getTime();
+      const endDateTime = new Date(this.endDate).getTime();
 
-    filteredCards = filteredCards.filter(card => {
-    if (!card.dueDateTime) return false;
-    const cardDateTime = new Date(card.dueDateTime).getTime();
-    return cardDateTime >= startDateTime && cardDateTime <= endDateTime;
-    });
+      filteredCards = filteredCards.filter(card => {
+        if (!card.dueDateTime) return false;
+        const cardDateTime = new Date(card.dueDateTime).getTime();
+        return cardDateTime >= startDateTime && cardDateTime <= endDateTime;
+      });
     }
 
     return {
-    ...list,
-    filteredCards
+      ...list,
+      filteredCards
     };
-    }).filter(list => {
+  }).filter(list => {
     const hasMatchingCards = list.filteredCards.length > 0;
     const hasSearchQuery = trimmedQuery !== '';
     const hasDateRange = this.startDate && this.endDate;
     return hasMatchingCards || (hasSearchQuery && hasDateRange);
-    });
-    }
+  });
+}
 
     }
     };
