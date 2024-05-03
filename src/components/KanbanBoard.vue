@@ -268,4 +268,3 @@
 <style scoped="">
   @import '@/assets/input.css';
 </style>
-
