@@ -199,7 +199,7 @@
 
   },
   computed: {
-  formattedDueDateTime() {
+formattedDueDateTime() {
   if (this.selectedCard && this.selectedCard.dueDateTime) {
     const date = new Date(this.selectedCard.dueDateTime);
     const year = date.getFullYear();
@@ -208,10 +208,9 @@
     const hours = ('0' + date.getHours()).slice(-2);
     const minutes = ('0' + date.getMinutes()).slice(-2);
     return `${year}-${month}-${day} ${hours}:${minutes}`;
-    } else {
-    return '';
-    }
-    },
+  }
+  return ''; 
+},
     filteredLists() {
   // Trimmed search query
   const trimmedQuery = this.searchQuery.trim();
